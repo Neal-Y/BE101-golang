@@ -1,11 +1,9 @@
 package language
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type Language interface {
-	GetMessage(event_name string) string
+	GetMessage(event_name string) (string, error)
 }
 
 var EventMessage = map[string]map[string]string{
@@ -23,20 +21,28 @@ var EventMessage = map[string]map[string]string{
 	},
 }
 
-type GenericLanguage struct {
-	LanguageCode string
-}
+type ZnTW struct{}
+type EnUS struct{}
 
-func (g GenericLanguage) GetMessage(event_name string) (string, error) {
-	if _, ok := EventMessage[event_name][g.LanguageCode]; !ok {
-		return "", fmt.Errorf("event name %s not found in %s", event_name, g.LanguageCode)
+func (z ZnTW) GetMessage(event_name string) (string, error) {
+	lang := "zh-tw"
+
+	if _, ok := EventMessage[event_name][lang]; !ok {
+		return "沒有這個事件訊息", fmt.Errorf("event name %s not found in %s", event_name, lang)
 	}
-	return EventMessage[event_name][g.LanguageCode], nil
+
+	return EventMessage[event_name][lang], nil
 }
 
-// func (g GenericLanguage) Getter() string {
-// 	return g.LanguageCode
-// }
+func (e EnUS) GetMessage(event_name string) (string, error) {
+	lang := "en-us"
+
+	if _, ok := EventMessage[event_name][lang]; !ok {
+		return "No such Event or Language", fmt.Errorf("event name %s not found in %s", event_name, lang)
+	}
+
+	return EventMessage[event_name][lang], nil
+}
 
 /*
 {
