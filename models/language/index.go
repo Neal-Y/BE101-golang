@@ -34,6 +34,10 @@ func (g GenericLanguage) GetMessage(event_name string) (string, error) {
 	return EventMessage[event_name][g.LanguageCode], nil
 }
 
+// func (g GenericLanguage) Getter() string {
+// 	return g.LanguageCode
+// }
+
 /*
 {
     "registerSuccess": {

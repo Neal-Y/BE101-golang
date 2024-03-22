@@ -5,20 +5,20 @@ import "be101_golang/models/language"
 // User is the method set
 type User interface {
 	GetName() string
-	GetPreferredLanguage() language.Language
+	GetPreferredLanguage() string
 }
 
 type Student struct {
 	Name              string
-	PreferredLanguage language.Language
+	PreferredLanguage language.GenericLanguage
 }
 type Guest struct {
 	Name              string
-	PreferredLanguage language.Language
+	PreferredLanguage language.GenericLanguage
 }
 
-func (s Student) GetName() string                         { return s.Name }
-func (s Student) GetPreferredLanguage() language.Language { return s.PreferredLanguage }
+func (s Student) GetName() string              { return s.Name }
+func (s Student) GetPreferredLanguage() string { return s.PreferredLanguage.LanguageCode }
 
-func (g Guest) GetName() string                         { return "Guest" }
-func (g Guest) GetPreferredLanguage() language.Language { return g.PreferredLanguage }
+func (g Guest) GetName() string              { return "Guest" }
+func (g Guest) GetPreferredLanguage() string { return g.PreferredLanguage.LanguageCode }
