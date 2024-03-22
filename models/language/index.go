@@ -24,11 +24,18 @@ type EnUS struct{}
 
 func (z ZnTW) GetMessage(event_name string) string {
 	lang := "zh-tw"
+	if _, ok := EventMessage[event_name][lang]; !ok {
+		return "沒有這個事件訊息"
+	}
 	return EventMessage[event_name][lang]
 }
 
 func (e EnUS) GetMessage(event_name string) string {
 	lang := "en-us"
+	if _, ok := EventMessage[event_name][lang]; !ok {
+		return "No such event message"
+
+	}
 	return EventMessage[event_name][lang]
 }
 
