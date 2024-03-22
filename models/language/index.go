@@ -6,6 +6,9 @@ type Language interface {
 	GetMessage(event_name string) (string, error)
 }
 
+//TODO: use this list to validate the language input
+// var LanguageList = []string{"zh-tw", "en-us"}
+
 var EventMessage = map[string]map[string]string{
 	"registerSuccess": {
 		"zh-tw": "註冊成功。歡迎加入我們的社群！",
@@ -24,24 +27,33 @@ var EventMessage = map[string]map[string]string{
 type ZnTW struct{}
 type EnUS struct{}
 
-func (z ZnTW) GetMessage(event_name string) (string, error) {
-	lang := "zh-tw"
-
-	if _, ok := EventMessage[event_name][lang]; !ok {
-		return "沒有這個事件訊息", fmt.Errorf("event name %s not found in %s", event_name, lang)
+// TODO: improve this function with a switch statement, use other flow control statements.
+func NewLanguage(lang string) (Language, error) {
+	switch lang {
+	case "zh-tw":
+		return ZnTW{}, nil
+	case "en-us":
+		return EnUS{}, nil
+	default:
+		return nil, fmt.Errorf("language %s not found", lang)
 	}
+}
 
-	return EventMessage[event_name][lang], nil
+func (z ZnTW) GetMessage(event_name string) (string, error) {
+	return LanguageCheck("zh-tw", event_name)
 }
 
 func (e EnUS) GetMessage(event_name string) (string, error) {
-	lang := "en-us"
+	return LanguageCheck("en-us", event_name)
+}
 
-	if _, ok := EventMessage[event_name][lang]; !ok {
-		return "No such Event or Language", fmt.Errorf("event name %s not found in %s", event_name, lang)
+func LanguageCheck(lang string, event_name string) (string, error) {
+	if langMessage, ok := EventMessage[event_name]; ok {
+		if message, ok := langMessage[lang]; ok {
+			return message, nil
+		}
 	}
-
-	return EventMessage[event_name][lang], nil
+	return "", fmt.Errorf("message %s not found", event_name)
 }
 
 /*
