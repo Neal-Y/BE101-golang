@@ -4,10 +4,8 @@ import "fmt"
 
 type Language interface {
 	GetMessage(event_name string) (string, error)
+	GetLanguage() Language
 }
-
-//TODO: use this list to validate the language input
-// var LanguageList = []string{"zh-tw", "en-us"}
 
 var EventMessage = map[string]map[string]string{
 	"registerSuccess": {
@@ -27,16 +25,12 @@ var EventMessage = map[string]map[string]string{
 type ZnTW struct{}
 type EnUS struct{}
 
-// TODO: improve this function with a switch statement, use other flow control statements.
-func NewLanguage(lang string) (Language, error) {
-	switch lang {
-	case "zh-tw":
-		return ZnTW{}, nil
-	case "en-us":
-		return EnUS{}, nil
-	default:
-		return nil, fmt.Errorf("language %s not found", lang)
-	}
+func (z ZnTW) GetLanguage() Language {
+	return ZnTW{}
+}
+
+func (e EnUS) GetLanguage() Language {
+	return EnUS{}
 }
 
 func (z ZnTW) GetMessage(event_name string) (string, error) {
