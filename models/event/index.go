@@ -7,7 +7,7 @@ import (
 
 type Event interface {
 	AddNotifier(notifier notifier.Notifier)
-	Trigger(user user.User)
+	Trigger(user user.User, message string)
 	GetEventName() string
 }
 
@@ -27,13 +27,24 @@ type CancelClass struct {
 	BaseEvent
 }
 
+/*
+	signupEvent := Signup{}
+	signupEvent.AddNotifier(emailNotifier)
+	signupEvent.AddNotifier(smsNotifier)
+	signupEvent.Trigger(user, signupEvent.GetEventName())
+
+	or
+
+	signupEvent.Trigger(user)
+*/
+
 func (b *BaseEvent) AddNotifier(notifier notifier.Notifier) {
 	b.methods = append(b.methods, notifier)
 }
 
-func (b *BaseEvent) Trigger(user user.User, event Event) {
+func (b *BaseEvent) Trigger(user user.User, message string) {
 	for _, notifier := range b.methods {
-		if msg, err := user.GetPreferredLanguage().GetMessage(event.GetEventName()); err == nil {
+		if msg, err := user.GetPreferredLanguage().GetMessage(message); err == nil {
 			notifier.Notify(user, msg)
 		}
 	}
