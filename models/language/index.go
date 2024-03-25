@@ -8,15 +8,15 @@ type Language interface {
 }
 
 var EventMessage = map[string]map[string]string{
-	"registerSuccess": {
+	"register": {
 		"zh-tw": "註冊成功。歡迎加入我們的社群！",
 		"en-us": "Registration successful. Welcome to our community!",
 	},
-	"bookingSuccess": {
+	"booking": {
 		"zh-tw": "課程預定成功。期待見到你！",
 		"en-us": "Course successfully booked. We look forward to seeing you!",
 	},
-	"cancellationSuccess": {
+	"cancellation": {
 		"zh-tw": "課程取消成功。希望在其他課程見到你。",
 		"en-us": "Course successfully cancelled. We hope to see you in other courses.",
 	},
