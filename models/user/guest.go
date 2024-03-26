@@ -3,7 +3,6 @@ package user
 import "be101_golang/models/language"
 
 type Guest struct {
-	Name              string
 	PreferredLanguage language.Language
 }
 
