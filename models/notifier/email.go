@@ -1,7 +1,12 @@
 package notifier
 
-// import "be101_golang/models/user"
+import (
+	"be101_golang/models/user"
+	"fmt"
+)
 
-// type EmailNotifier struct{}
+type EmailNotifier struct{}
 
-// func (e EmailNotifier) Notify(user user.User, message string) {}
+func (e EmailNotifier) Notify(user user.User, message string) {
+	fmt.Println("Email sent to", user.GetName(), "with message:", message)
+}

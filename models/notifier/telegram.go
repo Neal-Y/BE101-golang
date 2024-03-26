@@ -1,7 +1,12 @@
 package notifier
 
-// import "be101_golang/models/user"
+import (
+	"be101_golang/models/user"
+	"fmt"
+)
 
-// func (t TelegramNotifier) Notify(user user.User, message string) {}
+type TelegramNotifier struct{}
 
-// type TelegramNotifier struct{}
+func (t TelegramNotifier) Notify(user user.User, message string) {
+	fmt.Println("Telegram message sent to", user.GetName(), "with message:", message)
+}
