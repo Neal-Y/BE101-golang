@@ -4,15 +4,13 @@ func main() {
 	println("git test")
 }
 
-// type Employee struct {
-// 	Name string
-// }
+/*
+	signupEvent := Signup{}
+	signupEvent.AddNotifier(emailNotifier)
+	signupEvent.AddNotifier(smsNotifier)
+	signupEvent.Trigger(user, signupEvent.GetEventName())
 
-// type Department struct {
-// 	Name   string
-// 	People []interface{}
-// }
+	or
 
-// func (d *Department) Add(employee interface{}) {
-// 	d.People = append(d.People, employee)
-// }
+	signupEvent.Trigger(user)
+*/

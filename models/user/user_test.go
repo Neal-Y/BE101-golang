@@ -14,3 +14,12 @@ func TestGuestGetName(t *testing.T) {
 	}
 	assert.Equal(t, "Guest", g.GetName())
 }
+
+func TestGuestGetPreferredLanguage(t *testing.T) {
+	lang := user.ZnTW{}
+	g := user.Guest{}
+	if g.GetPreferredLanguage() != nil {
+		t.Errorf("Expected nil, got %s", g.GetPreferredLanguage())
+	}
+	assert.Nil(t, g.GetPreferredLanguage())
+}
