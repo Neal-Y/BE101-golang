@@ -3,7 +3,7 @@ package language
 type ZnTW struct{}
 
 func (z ZnTW) GetLanguage() string {
-	return "zh-tw"
+	return ZhTWCode
 }
 
 func (z ZnTW) GetMessage(event_name string) (string, error) {
