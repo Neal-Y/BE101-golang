@@ -1,7 +1,12 @@
 package notifier
 
-// import "be101_golang/models/user"
+import (
+	"be101_golang/models/user"
+	"fmt"
+)
 
-// func (s SMSNotifier) Notify(user user.User, message string) {}
+type SMSNotifier struct{}
 
-// type SMSNotifier struct{}
+func (s SMSNotifier) Notify(user user.User, message string) {
+	fmt.Println("SMS sent to", user.GetName(), "with message:", message)
+}
