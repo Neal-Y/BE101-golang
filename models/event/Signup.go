@@ -5,7 +5,7 @@ import (
 )
 
 type Signup struct {
-	EventFactory
+	methods *EventFactory
 }
 
 func (s Signup) GetEventName() string {
@@ -13,5 +13,5 @@ func (s Signup) GetEventName() string {
 }
 
 func (s *Signup) Trigger(user user.User) {
-	s.EventFactory.Trigger(user, s.GetEventName())
+	s.methods.Trigger(user, s.GetEventName())
 }

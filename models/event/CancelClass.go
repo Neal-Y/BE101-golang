@@ -5,7 +5,7 @@ import (
 )
 
 type CancelClass struct {
-	EventFactory
+	methods *EventFactory
 }
 
 func (c CancelClass) GetEventName() string {
@@ -13,5 +13,5 @@ func (c CancelClass) GetEventName() string {
 }
 
 func (c *CancelClass) Trigger(user user.User) {
-	c.EventFactory.Trigger(user, c.GetEventName())
+	c.methods.Trigger(user, c.GetEventName())
 }

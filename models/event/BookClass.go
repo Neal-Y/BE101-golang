@@ -5,7 +5,7 @@ import (
 )
 
 type BookClass struct {
-	EventFactory
+	methods *EventFactory
 }
 
 func (b BookClass) GetEventName() string {
@@ -13,5 +13,5 @@ func (b BookClass) GetEventName() string {
 }
 
 func (b *BookClass) Trigger(user user.User) {
-	b.EventFactory.Trigger(user, b.GetEventName())
+	b.methods.Trigger(user, b.GetEventName())
 }
