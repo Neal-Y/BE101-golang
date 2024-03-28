@@ -14,7 +14,6 @@ const (
 type Event interface {
 	AddNotifier(notifier notifier.Notifier)
 	Trigger(user user.User)
-	GetEventName() string
 }
 
 type EventFactory struct {
