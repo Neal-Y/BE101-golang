@@ -5,28 +5,27 @@ import (
 	"be101_golang/models/user"
 )
 
+const (
+	Cancel   = "cancellation"
+	Booking  = "booking"
+	Register = "register"
+)
+
 type Event interface {
 	AddNotifier(notifier notifier.Notifier)
 	Trigger(user user.User)
 }
 
-type Signup struct {
-	studentID string
+type EventFactory struct {
+	Notifier []notifier.Notifier
 }
 
-type BookClass struct {
-	classID string
+func (e *EventFactory) AddNotifier(n notifier.Notifier) {
+	e.Notifier = append(e.Notifier, n)
 }
 
-type CancelClass struct {
-	classID string
+func (e *EventFactory) Trigger(user user.User, eventName string) {
+	for _, method := range e.Notifier {
+		method.Notify(user, eventName)
+	}
 }
-
-func (s Signup) AddNotifier(notifier notifier.Notifier) {}
-func (s Signup) Trigger(user user.User)                 {}
-
-func (b BookClass) AddNotifier(notifier notifier.Notifier) {}
-func (b BookClass) Trigger(user user.User)                 {}
-
-func (c CancelClass) AddNotifier(notifier notifier.Notifier) {}
-func (c CancelClass) Trigger(user user.User)                 {}
