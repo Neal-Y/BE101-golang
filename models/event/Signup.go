@@ -9,7 +9,7 @@ type Signup struct {
 }
 
 func (s Signup) GetEventName() string {
-	return "register"
+	return Register
 }
 
 func (s *Signup) Trigger(user user.User) {

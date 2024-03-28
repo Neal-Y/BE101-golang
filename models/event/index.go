@@ -5,6 +5,12 @@ import (
 	"be101_golang/models/user"
 )
 
+const (
+	Cancel   = "cancellation"
+	Booking  = "booking"
+	Register = "register"
+)
+
 type Event interface {
 	AddNotifier(notifier notifier.Notifier)
 	Trigger(user user.User)

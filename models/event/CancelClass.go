@@ -9,7 +9,7 @@ type CancelClass struct {
 }
 
 func (c CancelClass) GetEventName() string {
-	return "cancellation"
+	return Cancel
 }
 
 func (c *CancelClass) Trigger(user user.User) {

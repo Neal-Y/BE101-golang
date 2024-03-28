@@ -9,7 +9,7 @@ type BookClass struct {
 }
 
 func (b BookClass) GetEventName() string {
-	return "booking"
+	return Booking
 }
 
 func (b *BookClass) Trigger(user user.User) {
