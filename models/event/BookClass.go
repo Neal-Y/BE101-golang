@@ -5,9 +5,11 @@ import (
 )
 
 type BookClass struct {
-	methods *EventFactory
+	Methods *EventFactory
 }
 
 func (b *BookClass) Trigger(user user.User) {
-	b.methods.Trigger(user, Booking)
+	if message, _ := user.GetPreferredLanguage().GetMessage(Booking); message != "" {
+		b.Methods.Trigger(user, message)
+	}
 }

@@ -5,9 +5,11 @@ import (
 )
 
 type Signup struct {
-	methods *EventFactory
+	Methods *EventFactory
 }
 
 func (s *Signup) Trigger(user user.User) {
-	s.methods.Trigger(user, Register)
+	if message, _ := user.GetPreferredLanguage().GetMessage(Register); message != "" {
+		s.Methods.Trigger(user, message)
+	}
 }

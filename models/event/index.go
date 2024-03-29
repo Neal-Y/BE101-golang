@@ -21,6 +21,18 @@ type EventFactory struct {
 }
 
 func (e *EventFactory) AddNotifier(n notifier.Notifier) {
+	// 目前只允許添加三個Notifier，因為只有三個管道
+	if len(e.Notifier) >= 3 {
+		return
+	}
+
+	// 確保沒有重複
+	for _, existingNotifier := range e.Notifier {
+		if existingNotifier == n {
+			return
+		}
+	}
+
 	e.Notifier = append(e.Notifier, n)
 }
 

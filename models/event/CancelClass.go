@@ -5,9 +5,11 @@ import (
 )
 
 type CancelClass struct {
-	methods *EventFactory
+	Methods *EventFactory
 }
 
 func (c *CancelClass) Trigger(user user.User) {
-	c.methods.Trigger(user, Cancel)
+	if message, _ := user.GetPreferredLanguage().GetMessage(Cancel); message != "" {
+		c.Methods.Trigger(user, message)
+	}
 }
