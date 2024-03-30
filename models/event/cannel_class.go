@@ -10,7 +10,5 @@ type CancelClass struct {
 }
 
 func (c *CancelClass) Trigger(user user.User) {
-	if message, _ := user.GetPreferredLanguage().GetMessage(constant.Cancel); message != "" {
-		c.Methods.Trigger(user, message)
-	}
+	c.Methods.Trigger(user, TriggerHelper(user, constant.Cancel))
 }

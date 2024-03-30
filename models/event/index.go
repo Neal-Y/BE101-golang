@@ -11,39 +11,36 @@ type Event interface {
 }
 
 type EventFactory struct {
-	Notifier []notifier.Notifier
+	Notifier map[string]notifier.Notifier
 }
 
+func NewEventFactory() *EventFactory {
+	return &EventFactory{
+		Notifier: make(map[string]notifier.Notifier),
+	}
+}
+
+// map is key-value pair, so we don't need to concern duplicate key
 func (e *EventFactory) AddNotifier(n notifier.Notifier) {
 	// 目前只允許添加三個Notifier，因為只有三個管道
 	if len(e.Notifier) >= 3 {
 		return
 	}
-
-	// notifyMap := make(map[string]notifier.Notifier,3)
-	// ok := notifyMap[n.GetName()]
-	// if !ok {
-	// 	notifyMap[n.GetName()] = n
-	// }
-
-	// {
-
-	// 	"email": notifier.Notifier,
-	// }
-
-	// 確保沒有重複
-	// TODO: 這裡的比較方式不夠好，應該要用其他方式來比較
-	for _, existingNotifier := range e.Notifier {
-		if existingNotifier == n {
-			return
-		}
-	}
-
-	e.Notifier = append(e.Notifier, n)
+	e.Notifier[n.GetName()] = n
 }
 
 func (e *EventFactory) Trigger(user user.User, eventName string) {
 	for _, method := range e.Notifier {
 		method.Notify(user, eventName)
 	}
+}
+
+func TriggerHelper(user user.User, event_name string) (message string) {
+	message, err := user.GetPreferredLanguage().GetMessage(event_name)
+
+	if err != nil && message == "" {
+		return
+	}
+
+	return message
 }

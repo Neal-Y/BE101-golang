@@ -10,7 +10,5 @@ type Signup struct {
 }
 
 func (s *Signup) Trigger(user user.User) {
-	if message, _ := user.GetPreferredLanguage().GetMessage(constant.Register); message != "" {
-		s.Methods.Trigger(user, message)
-	}
+	s.Methods.Trigger(user, TriggerHelper(user, constant.Register))
 }

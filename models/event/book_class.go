@@ -10,8 +10,5 @@ type BookClass struct {
 }
 
 func (b *BookClass) Trigger(user user.User) {
-
-	if message, _ := user.GetPreferredLanguage().GetMessage(constant.Booking); message != "" {
-		b.Methods.Trigger(user, message)
-	}
+	b.Methods.Trigger(user, TriggerHelper(user, constant.Booking))
 }
