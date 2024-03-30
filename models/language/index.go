@@ -29,46 +29,16 @@ var EventMessage = map[string]map[string]string{
 	},
 }
 
-func LanguageCheck(lang string, event_name string) (string, error) {
-	if langMessage, ok := EventMessage[event_name]; ok {
-		if message, ok := langMessage[lang]; ok {
-			return message, nil
-		}
+func LanguageCheck(lang string, event_name string) (message string, err error) {
+	langMessage, ok := EventMessage[event_name]
+	if !ok {
+		return "", fmt.Errorf("event %s not found", event_name)
 	}
-	return "", fmt.Errorf("message %s not found", event_name)
+
+	message, ok = langMessage[lang]
+	if !ok {
+		return "", fmt.Errorf("language %s not found", lang)
+	}
+
+	return
 }
-
-// func LanguageCheck132(lang string, event_name string) (result string,result12 string, err error) {
-// 	langMessage, ok := EventMessage[event_name];
-// 	if !ok {
-// 		err = fmt.Errorf("message %s not found", event_name)
-// 	    return
-// 	}
-
-// 	message, ok := langMessage[lang];
-// 	if !ok {
-// 		err = fmt.Errorf("message %s not found", event_name)
-// 	    return
-
-// 	}
-
-// 	result = message
-// 	return
-// }
-
-/*
-{
-    "registerSuccess": {
-        "en-us": "Registration successful. Welcome to our community!",
-        "zh-tw": "註冊成功。歡迎加入我們的社群！"
-    },
-    "bookingSuccess": {
-        "en-us": "Course successfully booked. We look forward to seeing you!",
-        "zh-tw": "課程預定成功。期待見到你！"
-     },
-    "cancellationSuccess": {
-        "en-us": "Course successfully cancelled. We hope to see you in other courses.",
-        "zh-tw": "課程取消成功。希望在其他課程見到你。"
-     },
-}
-*/
