@@ -6,4 +6,5 @@ import (
 
 type Notifier interface {
 	Notify(user user.User, message string)
+	// GetName() string
 }

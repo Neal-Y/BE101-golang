@@ -1,29 +1,31 @@
 package language
 
-import "fmt"
+import (
+	"be101_golang/models/constant"
+	"fmt"
+)
 
 type Language interface {
 	GetMessage(event_name string) (string, error)
 	GetLanguage() string
 }
 
-const (
-	EnUSCode = "en-us"
-	ZhTWCode = "zh-tw"
-)
-
 var EventMessage = map[string]map[string]string{
-	"register": {
-		ZhTWCode: "註冊成功。歡迎加入我們的社群！",
-		EnUSCode: "Registration successful. Welcome to our community!",
+	constant.Newyear: {
+		constant.ZhTWCode: "新年快樂",
+		constant.EnUSCode: "Happy New Year",
 	},
-	"booking": {
-		ZhTWCode: "課程預定成功。期待見到你！",
-		EnUSCode: "Course successfully booked. We look forward to seeing you!",
+	constant.Register: {
+		constant.ZhTWCode: "註冊成功。歡迎加入我們的社群！",
+		constant.EnUSCode: "Registration successful. Welcome to our community!",
 	},
-	"cancellation": {
-		ZhTWCode: "課程取消成功。希望在其他課程見到你。",
-		EnUSCode: "Course successfully cancelled. We hope to see you in other courses.",
+	constant.Booking: {
+		constant.ZhTWCode: "課程預定成功。期待見到你！",
+		constant.EnUSCode: "Course successfully booked. We look forward to seeing you!",
+	},
+	constant.Cancel: {
+		constant.ZhTWCode: "課程取消成功。希望在其他課程見到你。",
+		constant.EnUSCode: "Course successfully cancelled. We hope to see you in other courses.",
 	},
 }
 
@@ -35,6 +37,24 @@ func LanguageCheck(lang string, event_name string) (string, error) {
 	}
 	return "", fmt.Errorf("message %s not found", event_name)
 }
+
+// func LanguageCheck132(lang string, event_name string) (result string,result12 string, err error) {
+// 	langMessage, ok := EventMessage[event_name];
+// 	if !ok {
+// 		err = fmt.Errorf("message %s not found", event_name)
+// 	    return
+// 	}
+
+// 	message, ok := langMessage[lang];
+// 	if !ok {
+// 		err = fmt.Errorf("message %s not found", event_name)
+// 	    return
+
+// 	}
+
+// 	result = message
+// 	return
+// }
 
 /*
 {
