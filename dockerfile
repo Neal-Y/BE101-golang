@@ -19,7 +19,7 @@ COPY . .
 # 构建应用程序
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o be101-golang
  
-=> binary
+# => binary
 
 # SDET
 # SWE
