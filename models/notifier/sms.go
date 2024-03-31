@@ -1,6 +1,7 @@
 package notifier
 
 import (
+	"be101_golang/models/constant"
 	"be101_golang/models/user"
 	"fmt"
 )
@@ -12,5 +13,5 @@ func (s SMSNotifier) Notify(user user.User, message string) {
 }
 
 func (s SMSNotifier) GetName() string {
-	return "sms"
+	return constant.SMS
 }

@@ -42,5 +42,5 @@ func TriggerHelper(user user.User, event_name string) (message string) {
 		return
 	}
 
-	return message
+	return
 }
