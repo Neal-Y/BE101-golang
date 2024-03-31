@@ -29,9 +29,12 @@ func (e *EventFactory) AddNotifier(n notifier.Notifier) {
 	e.Notifier[n.GetName()] = n
 }
 
-func (e *EventFactory) Trigger(user user.User, eventName string) {
+func (e *EventFactory) Trigger(user user.User, eventMessage string) {
+	if eventMessage == "" {
+		return
+	}
 	for _, method := range e.Notifier {
-		method.Notify(user, eventName)
+		method.Notify(user, eventMessage)
 	}
 }
 
