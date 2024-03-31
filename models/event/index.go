@@ -38,12 +38,12 @@ func (e *EventFactory) Trigger(user user.User, eventMessage string) {
 	}
 }
 
-func TriggerHelper(user user.User, event_name string) (message string) {
-	message, err := user.GetPreferredLanguage().GetMessage(event_name)
+func TriggerHelper(user user.User, eventName string) (message string) {
+	message, err := user.GetPreferredLanguage().GetMessage(eventName)
 
 	if err != nil && message == "" {
 		return
 	}
 
-	return message
+	return
 }
