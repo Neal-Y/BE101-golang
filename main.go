@@ -24,26 +24,26 @@ func main() {
 	// 產生容器好了
 	// which notifier want to notify (maybe SMS, Telegram, Email or all)
 	//TODO: 限制容器只能裝這三個notifier，且不能重複
-	signupNotifier := &event.EventFactory{}
+	signupNotifier := event.NewEventFactory()
 	signupNotifier.AddNotifier(email)
 	signupNotifier.AddNotifier(sms)
 
-	classNotifier := &event.EventFactory{}
+	classNotifier := event.NewEventFactory()
 	classNotifier.AddNotifier(email)
 	classNotifier.AddNotifier(tel)
 
-	lineNotifier := &event.EventFactory{}
+	lineNotifier := event.NewEventFactory()
 	lineNotifier.AddNotifier(line)
 
 	// 發生啥事
 	signup := event.Signup{Methods: signupNotifier}
 	bookclass := event.BookClass{Methods: classNotifier}
-	canclclass := event.CancelClass{Methods: classNotifier}
+	cancelclass := event.CancelClass{Methods: classNotifier}
 	newyear := event.NewYear{Methods: lineNotifier}
 
 	// 通知
 	signup.Trigger(guest)
 	bookclass.Trigger(student)
-	canclclass.Trigger(student)
+	cancelclass.Trigger(student)
 	newyear.Trigger(student)
 }

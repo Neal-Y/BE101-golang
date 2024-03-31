@@ -10,10 +10,5 @@ type NewYear struct {
 }
 
 func (n *NewYear) Trigger(user user.User) {
-	message, err := user.GetPreferredLanguage().GetMessage(constant.Newyear)
-	if err != nil {
-		return
-	}
-
-	n.Methods.Trigger(user, message)
+	n.Methods.Trigger(user, TriggerHelper(user, constant.Newyear))
 }

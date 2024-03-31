@@ -10,3 +10,7 @@ type SMSNotifier struct{}
 func (s SMSNotifier) Notify(user user.User, message string) {
 	fmt.Println("SMS sent to", user.GetName(), "with message:", message)
 }
+
+func (s SMSNotifier) GetName() string {
+	return "sms"
+}
