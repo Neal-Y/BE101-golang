@@ -22,10 +22,6 @@ func NewEventFactory() *EventFactory {
 
 // map is key-value pair, so we don't need to concern duplicate key
 func (e *EventFactory) AddNotifier(n notifier.Notifier) {
-	// 目前只允許添加三個Notifier，因為只有三個管道
-	if len(e.Notifier) >= 3 {
-		return
-	}
 	e.Notifier[n.GetName()] = n
 }
 

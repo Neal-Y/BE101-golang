@@ -42,6 +42,7 @@ func TestNotifierNotify(t *testing.T) {
 		{user.Student{Name: "yang"}, notifier.LineNotifier{}, "Hello", "Line sent to yang with message: Hello\n"},
 	} // 老實說這邊expected_message 是用硬編碼的方式，本來想說可以使用fmt.Sprintf() 來做，但是發現fmt.Sprintf() 也是硬編碼，所以就沒有使用fmt.Sprintf() 來做
 
+	// 至於這邊由於我的notify並沒有回傳值，是直接透過fmt.Println印出來，我只能透過stdout來檢查，所以這邊我使用了捕獲stdout的方式來檢查
 	for _, tt := range flagtests {
 		t.Run(tt.expected_message, func(t *testing.T) {
 			// 捕获输出
