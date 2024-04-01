@@ -28,7 +28,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o be101-golang
 # https://hub.docker.com/_/alpine
 
 # 使用scratch作为最小运行环境
-FROM scratch
+FROM alpine
 
 # alpine => 20K
 # linux => 20M
