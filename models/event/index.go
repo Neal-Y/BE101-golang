@@ -26,9 +26,6 @@ func (e *EventFactory) AddNotifier(n notifier.Notifier) {
 }
 
 func (e *EventFactory) Trigger(user user.User, eventMessage string) {
-	if eventMessage == "" {
-		return
-	}
 	for _, method := range e.Notifier {
 		method.Notify(user, eventMessage)
 	}
