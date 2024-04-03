@@ -1,58 +1,63 @@
 package event_test
 
 import (
-	"be101_golang/models/constant"
 	"be101_golang/models/event"
 	"be101_golang/models/language"
-	"be101_golang/models/notifier"
 	"be101_golang/models/user"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-func TestEventTrigger(t *testing.T) {
-	var flagtests = map[string]struct {
-		notifier []notifier.Notifier
-		user     user.User
-	}{
-		constant.Booking: {[]notifier.Notifier{notifier.SMSNotifier{}, notifier.TelegramNotifier{}}, user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}},
-		constant.Cancel:  {[]notifier.Notifier{notifier.TelegramNotifier{}}, user.Student{Name: "jonny", PreferredLanguage: language.ZnTW{}}},
-	}
+// MockNotifier is a mock implementation of the Notifier interface
+// 意思就是mock一个Notifier接口
+type MockNotifier struct {
+	mock.Mock
+}
 
-	for name, tt := range flagtests {
-		t.Run(name, func(t *testing.T) {
-			tmp := event.NewEventFactory()
-			for _, notifier := range tt.notifier {
-				tmp.AddNotifier(notifier)
-			}
-			tmp.Trigger(tt.user, event.TriggerHelper(tt.user, name))
-		})
-	}
+// 那mock一個接口，就是實現這個接口的所有方法，這裡就是Notify和GetName
+func (m *MockNotifier) Notify(user user.User, message string) {
+	m.Called(user, message)
+}
+
+func (m *MockNotifier) GetName() string {
+	args := m.Called()
+	return args.String(0)
 }
 
 func TestEvent(t *testing.T) {
-	eventContainer := event.NewEventFactory()
-	eventContainer.AddNotifier(notifier.SMSNotifier{})
+	eventFactory := event.NewEventFactory()
 
-	testNotifier := notifier.TelegramNotifier{}
+	// 創建三個MockNotifier
+	mockLineNotifier := new(MockNotifier)
+	mockTelegramNotifier := new(MockNotifier)
+	mockSMSNotifier := new(MockNotifier)
 
-	var flagtests = map[string]struct {
-		event event.Event
-		user  user.User
-	}{
-		constant.Register: {&event.Signup{Methods: eventContainer}, user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}},
-		constant.Booking:  {&event.BookClass{Methods: eventContainer}, user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}},
-		constant.Cancel:   {&event.CancelClass{Methods: eventContainer}, user.Student{Name: "jonny", PreferredLanguage: language.ZnTW{}}},
-		constant.Newyear:  {&event.NewYear{Methods: eventContainer}, user.Student{Name: "jonny", PreferredLanguage: language.ZnTW{}}},
-	}
+	// 為每個MockNotifier設置GetName方法的預期行為
+	mockLineNotifier.On("GetName").Return("Line")
+	mockTelegramNotifier.On("GetName").Return("Telegram")
+	mockSMSNotifier.On("GetName").Return("SMS")
 
-	for _, tt := range flagtests {
-		t.Run("", func(t *testing.T) {
-			tt.event.AddNotifier(testNotifier)
-			tt.event.Trigger(tt.user)
-		})
-	}
+	// 設置每個MockNotifier的Notify方法的預期行為
+	testUser := user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}
+	expectedMessage := "expected message"
+	mockLineNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+	mockTelegramNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+	mockSMSNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+
+	// 將MockNotifier添加到EventFactory的Methods中
+	eventFactory.AddNotifier(mockLineNotifier)
+	eventFactory.AddNotifier(mockTelegramNotifier)
+	eventFactory.AddNotifier(mockSMSNotifier)
+
+	// 觸發事件
+	eventFactory.Trigger(testUser, expectedMessage)
+
+	// 驗證每個MockNotifier的Notify方法是否都各被调用了一次
+	mockLineNotifier.AssertNumberOfCalls(t, "Notify", 1)
+	mockTelegramNotifier.AssertNumberOfCalls(t, "Notify", 1)
+	mockSMSNotifier.AssertNumberOfCalls(t, "Notify", 1)
 }
 
 func TestEventFactoryEarlyReturn(t *testing.T) {
