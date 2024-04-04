@@ -22,17 +22,10 @@ func NewEventFactory() *EventFactory {
 
 // map is key-value pair, so we don't need to concern duplicate key
 func (e *EventFactory) AddNotifier(n notifier.Notifier) {
-	// 目前只允許添加三個Notifier，因為只有三個管道
-	if len(e.Notifier) >= 3 {
-		return
-	}
 	e.Notifier[n.GetName()] = n
 }
 
 func (e *EventFactory) Trigger(user user.User, eventMessage string) {
-	if eventMessage == "" {
-		return
-	}
 	for _, method := range e.Notifier {
 		method.Notify(user, eventMessage)
 	}
