@@ -30,10 +30,11 @@ func (m *MockNotifier) Notify(user user.User, message string) {
 }
 
 func (m *MockNotifier) GetName() string {
-	args := m.Called()
+	args := m.Called() // args是一個mock.Call，這個Call是一個struct，裡面有一個Arguments的interface{}，這個interface{}是一個"slice"(這就是為啥有[0])，裡面裝的是我們傳進去的參數，也就是Notifier.Name
 	return args.String(0)
 }
 
+// ? 確保在Trigger被呼叫時，每個Notifier的Notify方法都被按預期調用了正確的次數
 func TestEvent(t *testing.T) {
 	eventFactory := event.NewEventFactory()
 
@@ -59,37 +60,6 @@ func TestEvent(t *testing.T) {
 	for _, notifier := range Notifiers {
 		notifier.Notifier.AssertNumberOfCalls(t, "Notify", notifier.CallTimes)
 	}
-
-	// // 創建三個MockNotifier
-	// mockLineNotifier := new(MockNotifier)
-	// mockTelegramNotifier := new(MockNotifier)
-	// mockSMSNotifier := new(MockNotifier)
-
-	// // 為每個MockNotifier設置GetName方法的預期行為
-	// mockLineNotifier.On("GetName").Return("Line")
-	// mockTelegramNotifier.On("GetName").Return("Telegram")
-	// mockSMSNotifier.On("GetName").Return("SMS")
-
-	// // 設置每個MockNotifier的Notify方法的預期行為
-	// testUser := user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}
-	// expectedMessage := "expected message"
-	// mockLineNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-	// mockTelegramNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-	// mockSMSNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-
-	// // 將MockNotifier添加到EventFactory的Methods中
-	// eventFactory.AddNotifier(mockLineNotifier)
-	// eventFactory.AddNotifier(mockTelegramNotifier)
-	// eventFactory.AddNotifier(mockSMSNotifier)
-
-	// // 觸發事件
-	// eventFactory.Trigger(testUser, expectedMessage)
-
-	// // 驗證每個MockNotifier的Notify方法是否都各被调用了一次
-	// mockLineNotifier.AssertNumberOfCalls(t, "Notify", 1)
-	// mockTelegramNotifier.AssertNumberOfCalls(t, "Notify", 1)
-	// mockSMSNotifier.AssertNumberOfCalls(t, "Notify", 1)
-
 }
 
 func TestEventFactoryEarlyReturn(t *testing.T) {
