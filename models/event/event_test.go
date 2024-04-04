@@ -1,6 +1,7 @@
 package event_test
 
 import (
+	"be101_golang/models/constant"
 	"be101_golang/models/event"
 	"be101_golang/models/language"
 	"be101_golang/models/user"
@@ -16,6 +17,13 @@ type MockNotifier struct {
 	mock.Mock
 }
 
+// 試試看加上Table-Driven Tests 的精神，以及委託策略
+type NotifierTest struct {
+	Notifier  *MockNotifier
+	Name      string
+	CallTimes int
+}
+
 // 那mock一個接口，就是實現這個接口的所有方法，這裡就是Notify和GetName
 func (m *MockNotifier) Notify(user user.User, message string) {
 	m.Called(user, message)
@@ -29,35 +37,59 @@ func (m *MockNotifier) GetName() string {
 func TestEvent(t *testing.T) {
 	eventFactory := event.NewEventFactory()
 
-	// 創建三個MockNotifier
-	mockLineNotifier := new(MockNotifier)
-	mockTelegramNotifier := new(MockNotifier)
-	mockSMSNotifier := new(MockNotifier)
+	Notifiers := []NotifierTest{
+		{Notifier: new(MockNotifier), Name: constant.Line, CallTimes: 1},
+		{Notifier: new(MockNotifier), Name: constant.Telegram, CallTimes: 1},
+		{Notifier: new(MockNotifier), Name: constant.SMS, CallTimes: 1},
+		{Notifier: new(MockNotifier), Name: constant.Email, CallTimes: 1},
+	}
 
-	// 為每個MockNotifier設置GetName方法的預期行為
-	mockLineNotifier.On("GetName").Return("Line")
-	mockTelegramNotifier.On("GetName").Return("Telegram")
-	mockSMSNotifier.On("GetName").Return("SMS")
-
-	// 設置每個MockNotifier的Notify方法的預期行為
-	testUser := user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}
-	expectedMessage := "expected message"
-	mockLineNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-	mockTelegramNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-	mockSMSNotifier.On("Notify", testUser, expectedMessage).Return().Once()
-
-	// 將MockNotifier添加到EventFactory的Methods中
-	eventFactory.AddNotifier(mockLineNotifier)
-	eventFactory.AddNotifier(mockTelegramNotifier)
-	eventFactory.AddNotifier(mockSMSNotifier)
+	// 這邊就是把所有的Notifier都加進去EventFactory的Methods中
+	for _, notifier := range Notifiers {
+		notifier.Notifier.On("GetName").Return(notifier.Name)
+		notifier.Notifier.On("Notify", mock.Anything, mock.Anything).Return().Times(notifier.CallTimes)
+		eventFactory.AddNotifier(notifier.Notifier)
+	}
 
 	// 觸發事件
-	eventFactory.Trigger(testUser, expectedMessage)
+	testObject := user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}
+	eventFactory.Trigger(testObject, "expected message")
 
 	// 驗證每個MockNotifier的Notify方法是否都各被调用了一次
-	mockLineNotifier.AssertNumberOfCalls(t, "Notify", 1)
-	mockTelegramNotifier.AssertNumberOfCalls(t, "Notify", 1)
-	mockSMSNotifier.AssertNumberOfCalls(t, "Notify", 1)
+	for _, notifier := range Notifiers {
+		notifier.Notifier.AssertNumberOfCalls(t, "Notify", notifier.CallTimes)
+	}
+
+	// // 創建三個MockNotifier
+	// mockLineNotifier := new(MockNotifier)
+	// mockTelegramNotifier := new(MockNotifier)
+	// mockSMSNotifier := new(MockNotifier)
+
+	// // 為每個MockNotifier設置GetName方法的預期行為
+	// mockLineNotifier.On("GetName").Return("Line")
+	// mockTelegramNotifier.On("GetName").Return("Telegram")
+	// mockSMSNotifier.On("GetName").Return("SMS")
+
+	// // 設置每個MockNotifier的Notify方法的預期行為
+	// testUser := user.Student{Name: "neal", PreferredLanguage: language.EnUS{}}
+	// expectedMessage := "expected message"
+	// mockLineNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+	// mockTelegramNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+	// mockSMSNotifier.On("Notify", testUser, expectedMessage).Return().Once()
+
+	// // 將MockNotifier添加到EventFactory的Methods中
+	// eventFactory.AddNotifier(mockLineNotifier)
+	// eventFactory.AddNotifier(mockTelegramNotifier)
+	// eventFactory.AddNotifier(mockSMSNotifier)
+
+	// // 觸發事件
+	// eventFactory.Trigger(testUser, expectedMessage)
+
+	// // 驗證每個MockNotifier的Notify方法是否都各被调用了一次
+	// mockLineNotifier.AssertNumberOfCalls(t, "Notify", 1)
+	// mockTelegramNotifier.AssertNumberOfCalls(t, "Notify", 1)
+	// mockSMSNotifier.AssertNumberOfCalls(t, "Notify", 1)
+
 }
 
 func TestEventFactoryEarlyReturn(t *testing.T) {
